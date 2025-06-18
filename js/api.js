@@ -138,7 +138,7 @@ async function handleApiRequest(url) {
                 // 提取播放地址
                 let episodes = [];
                 
-                if (videoDetail.vod_play_url) {
+                if (videoDetail.vod_play_url&&~videoDetail.vod_play_url.indexOf('$$$')) {
                     // 分割不同播放源
                     const playSources = videoDetail.vod_play_url.split('$$$');
                     
@@ -154,6 +154,8 @@ async function handleApiRequest(url) {
                             return parts.length > 1 ? parts[1] : '';
                         }).filter(url => url && (url.startsWith('http://') || url.startsWith('https://')));
                     }
+                }else{
+                    episodes.push(videoDetail.vod_play_url)
                 }
                 
                 // 如果没有找到播放地址，尝试使用正则表达式查找m3u8链接
